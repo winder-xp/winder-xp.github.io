@@ -287,23 +287,29 @@ class Resultados2(Slide):
         self.play(TransformMatchingShapes(eq_M_m1_m2,eq_me_valor), FadeIn(exp_me))
         self.next_slide()
         self.play(FadeOut(exp_me,eq_me_valor))
-        exp_compensa_Fr = Tex("Para compensar $F_R$ habría que modificar la masa de manera que:").shift(0.5*UP)
-        eq_compensa_Fr = MathTex(r"\Delta m^\prime g = M^\prime a").shift(0.5*DOWN)
-        exp_compensa_Fr2 = Tex(r"Despejando $m_1^\prime$:").shift(0.5 * UP)
-        eq_compensa_Fr2 = MathTex(r"m_1^\prime = \frac{(m_2 + m_e)a + m_2 g}{g - a}").shift(0.5 * DOWN)
-        eq_compensa_Fr3 = MathTex(r"m_1^\prime = (0.0644 \pm 0.0002)\textrm{ kg}")
-        eq_compensa_Fr4 = MathTex(r"m_1^\prime - m_1 = (-5.8 \pm 1.1)\cdot 10^{-4} \textrm{ kg}")
+        exp_compensa_Fr = Tex("Para compensar $F_R$, como es una fuerza se tiene que:").shift(0.5*UP)
+        eq_compensa_Fr = MathTex(r"F_R = ma").shift(0.5*DOWN)
+        exp_compensa_Fr2 = Tex(r"Despejando $m$:").shift(0.5 * UP)
+        eq_compensa_Fr2 = MathTex(r"m = \frac{F_R}{a}").shift(0.5 * DOWN)
+        eq_compensa_Fr3 = MathTable(
+            [[r"0.7310 \pm 0.0007", "0.0077 \pm 0.0003"],
+             [r"0.5730 \pm 0.0004", "0.0099 \pm 0.0004"],
+             [r"0.4200 \pm 0.0003", "0.0135 \pm 0.0006"],
+             [r"0.2630 \pm 0.0003", "0.0215 \pm 0.0010"],
+             [r"0.1120 \pm 0.0003", "0.050 \pm 0.002"]],
+            col_labels=[Tex(r"$a$ (m$\cdot$s$^{-2}$)").scale(1.5), Tex(r"$m$ (kg)").scale(1.5)],
+            top_left_entry=Star().scale(0.3),
+            include_outer_lines=True
+        )
         self.play(FadeIn(exp_compensa_Fr),Write(eq_compensa_Fr))
         self.next_slide()
-        self.play(Unwrite(eq_compensa_Fr), FadeOut(exp_compensa_Fr))
-        self.play(Write(eq_compensa_Fr2), FadeIn(exp_compensa_Fr2))
+        self.play(FadeOut(exp_compensa_Fr))
+        self.play(TransformMatchingShapes(eq_compensa_Fr,eq_compensa_Fr2), FadeIn(exp_compensa_Fr2))
         self.next_slide()
         self.play(ReplacementTransform(eq_compensa_Fr2,eq_compensa_Fr3), FadeOut(exp_compensa_Fr2))
         self.next_slide()
-        self.play(ReplacementTransform(eq_compensa_Fr3, eq_compensa_Fr4))
-        self.next_slide()
-        self.play(FadeOut(eq_compensa_Fr4))
-
+        self.play(FadeOut(eq_compensa_Fr3))
+        
 class Resultados3(Slide):
     def construct(self):
         exp_apartado2 = Tex(r"Para $\Delta m = 4$g y $\Delta m = 0$g se miden \\aceleraciones $a$ y $a_r$, respectivamente. \\Se mantiene $F$ constante, pero \\$M$ va desde los $60.6$g hasta los $160.6$g")
@@ -397,3 +403,17 @@ class Resumen(Slide):
         self.play(Write(bl_resumen[3]))
         self.next_slide()
         self.play(FadeOut(bl_resumen),FadeOut(titulo))
+
+class CalculoErrores(Slide):
+    def construct(self):
+        errores = BulletedList(
+            r"$\delta m = |\frac{\partial m}{\partial F_R}|\delta F_R + |\frac{\partial m}{\partial a}|\delta a = \frac{\delta F_R}{a} + \frac{F_R}{a^2}\delta a$",
+            r"$\delta m_e = |\frac{dm_e}{dM}|\delta M = \delta M$",
+            r"$\delta a_c = |\frac{\partial a_c}{\partial a}|\delta a + |\frac{\partial a_c}{\partial a_r}|\delta a_r = \delta a +  \delta a_r$",
+            r"$\delta (\frac{1}{M}) = |\frac{d(\frac{1}{M})}{dM}|\delta M = \frac{\delta M}{M^2}$",
+            r"$\delta g = |\frac{dg}{dp}|\delta p = \delta p$ con $p$ la pendiente"
+        ).shift(0.5*DOWN)
+        titulo = Tex("Cálculo de errores").move_to([0, 3, 0]).set_color(YELLOW)
+        self.play(FadeIn(titulo),Write(errores))
+        self.next_slide()
+        self.play(FadeOut(titulo),Unwrite(errores))
